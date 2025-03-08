@@ -1,0 +1,11 @@
+<form [formGroup]="uploadForm" (ngSubmit)="onUpload()" enctype="multipart/form-data">
+  <label for="file">Select File:</label>
+  <input type="file" id="file" (change)="onFileSelect($event)" accept=".pdf,.jpg,.png,.xls" required />
+
+  <label for="author">Your Name:</label>
+  <input type="text" id="author" formControlName="author" required />
+
+  <button type="submit" [disabled]="uploadForm.invalid || !selectedFile">Upload</button>
+
+  <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+</form>
