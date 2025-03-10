@@ -1,0 +1,183 @@
+
+.dashboard-container {
+    padding: 20px;
+    max-width: 1300px;
+    margin: auto;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.top-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+
+.p-button {
+    font-size: 16px !important;
+    padding: 12px 18px !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    transition: 0.3s;
+}
+
+.p-button-danger {
+    background: #dc3545 !important;
+    border: none !important;
+}
+
+.p-button-danger:hover {
+    background: #c82333 !important;
+}
+
+.filters {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.filters .p-inputtext {
+    width: 230px;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+
+.p-calendar {
+    width: 230px !important;
+}
+
+
+.upload-dialog .p-dialog {
+    border-radius: 10px;
+    background: #ffffff;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+
+.upload-form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 20px;
+}
+
+.upload-file-label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.upload-file-input,
+.upload-author-input {
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    width: 100%;
+    transition: border 0.3s;
+}
+
+.upload-file-input:focus,
+.upload-author-input:focus {
+    border-color: #007ad9;
+    outline: none;
+}
+
+.upload-submit-btn {
+    background: #007ad9;
+    color: white;
+    font-weight: bold;
+    padding: 14px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.upload-submit-btn:disabled {
+    background: #cccccc;
+    cursor: not-allowed;
+}
+
+.upload-submit-btn:hover {
+    background: #005fa3;
+}
+
+.upload-error-msg {
+    color: red;
+    font-weight: bold;
+}
+
+.p-table {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.p-datatable thead {
+    background: #007ad9 !important;
+    color: white !important;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.p-datatable tbody tr {
+    transition: background 0.3s;
+}
+
+.p-datatable tbody tr:hover {
+    background: #e3f2fd !important;
+}
+
+.p-button-text {
+    font-size: 14px;
+    font-weight: bold;
+    padding: 8px 12px;
+    margin-right: 5px;
+    transition: 0.3s;
+}
+
+.p-button-text.p-button-danger {
+    color: #dc3545;
+}
+
+.p-button-text:hover {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+}
+
+.uploaded-files-dialog .p-dialog {
+    width: 60vw !important;
+    max-width: 800px;
+}
+
+.uploaded-files-table .p-datatable thead {
+    background: #007ad9 !important;
+    color: white !important;
+}
+
+.uploaded-files-table .p-datatable tbody tr:hover {
+    background: #f9f9f9 !important;
+}
+
+@media (max-width: 768px) {
+    .filters {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .filters .p-inputtext, .p-calendar {
+        width: 100% !important;
+    }
+
+    .top-buttons {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
