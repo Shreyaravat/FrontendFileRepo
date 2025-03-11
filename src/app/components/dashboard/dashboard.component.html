@@ -1,37 +1,38 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
 <div class="dashboard-container">
+
     <div class="top-buttons">
         <button (click)="showCreateForm()" pButton label="Create Document"></button>
-<p-dialog [(visible)]="displayDialog" modal="true" header="Upload File" class="upload-dialog">
-    <form [formGroup]="uploadForm" (ngSubmit)="onUpload()" enctype="multipart/form-data" class="upload-form-container">
-        <label for="file" class="upload-file-label">Select File:</label>
-        <input type="file" id="file" (change)="onFileSelect($event)" accept=".pdf,.jpg,.png,.xls" class="upload-file-input" />
+        <p-dialog [(visible)]="displayDialog" modal="true" header="Upload File" class="upload-dialog">
+            <form [formGroup]="uploadForm" (ngSubmit)="onUpload()" enctype="multipart/form-data"
+                class="upload-form-container">
+                <label for="file" class="upload-file-label">Select File:</label>
+                <input type="file" id="file" (change)="onFileSelect($event)" accept=".pdf,.jpg,.png,.xls"
+                    class="upload-file-input" />
 
-        <label for="author" class="upload-file-label">Your Name:</label>
-        <input type="text" id="author" formControlName="author" required class="upload-author-input" />
+                <label for="author" class="upload-file-label">Your Name:</label>
+                <input type="text" id="author" formControlName="author" required class="upload-author-input" />
 
-         <div *ngIf="selectedFile">
-            Selected File: {{ selectedFile.name }}
-        </div>
-        <div *ngIf="selectedDocument.fileName && !selectedFile">
-            Current File: {{ selectedDocument.fileName }}
-        </div>
-        <button type="submit" [disabled]="uploadForm.invalid || !selectedFile" class="upload-submit-btn">Upload</button>
+                <div *ngIf="selectedFile">
+                    Selected File: {{ selectedFile.name }}
+                </div>
+                <div *ngIf="selectedDocument.fileName && !selectedFile">
+                    Current File: {{ selectedDocument.fileName }}
+                </div>
+                <button type="submit" [disabled]="uploadForm.invalid || !selectedFile"
+                    class="upload-submit-btn">Upload</button>
 
-        <div *ngIf="errorMessage" class="upload-error-msg">{{ errorMessage }}</div>
-    </form>
-</p-dialog>
-
-
+                <div *ngIf="errorMessage" class="upload-error-msg">{{ errorMessage }}</div>
+            </form>
+        </p-dialog>
 
 
         <button pButton label="Logout" class="p-button-danger" (click)="logout()"></button>
     </div>
 
     <div class="filters">
-        <span class="p-float-label">
-            <input pInputText type="text" [(ngModel)]="filters.fileName" (input)="applyFilter()"
-                placeholder="Filter by Filename" />
-        </span>
+
 
         <span class="p-float-label">
             <input pInputText type="text" [(ngModel)]="filters.author" (input)="applyFilter()"
@@ -39,13 +40,22 @@
         </span>
 
         <span class="p-float-label">
-            <p-calendar [(ngModel)]="filters.dateRange" selectionMode="range" (onSelect)="applyFilter()"
-                placeholder="Filter by Date Range"></p-calendar>
+            <p-datepicker #calendar [(ngModel)]="filters.dateRange" selectionMode="range" (ngModelChange)="applyFilter()"
+                showIcon="true">
+            </p-datepicker>
+
+
+
         </span>
     </div>
 
-    <p-table #dt [value]="documents" [paginator]="false" [rows]="10" [scrollable]="true" scrollHeight="400px">
-        <ng-template pTemplate="header">
+    <p-table #dt [value]="filteredDocuments" 
+    [rows]="rowsPerPage" 
+    [scrollable]="true" 
+    [totalRecords]="totalRecords">   
+      
+
+    <ng-template pTemplate="header">
             <tr>
                 <th pSortableColumn="author">Uploader Name <p-sortIcon field="author"></p-sortIcon></th>
                 <th pSortableColumn="fileName">Filename <p-sortIcon field="fileName"></p-sortIcon></th>
@@ -65,44 +75,48 @@
                 <td>{{ doc.fileType }}</td>
                 <td>
 
-                    <p-dialog [(visible)]="displayLogDialog" modal="true" header="Uploaded Files Log"
-    [style]="{ width: '80vw', height: '70vh' }" class="uploaded-files-dialog" [contentStyle]="{ 'background': '#fff' }">
-    <p-table [value]="allFilesLog" [paginator]="true" [rows]="10" [scrollable]="true"
-        scrollHeight="400px" class="uploaded-files-table">
-        <ng-template pTemplate="header">
-            <tr>
-                <th pSortableColumn="authorName">Uploader</th>
-                <th pSortableColumn="docName">Document</th>
-                <th pSortableColumn="addedDate">Uploaded Date</th>
-                <th pSortableColumn="lastModified">Last Modified</th>
-                <th pSortableColumn="lastModifiedBy">Last Modified By</th>
-                <th pSortableColumn="downloadCount">Downloads</th>
-                <th pSortableColumn="size">Size</th>
-                <th pSortableColumn="downloadedBy">Downloaded By</th>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-file>
-            <tr>
-                <td>{{ file.author?.name }}</td>
-                <td>{{ file.docName }}</td>
-                <td>{{ file.addedDate | date:'short' }}</td>
-                <td>{{ file.lastModified | date:'short' }}</td>
-                <td>{{ file.lastModifiedBy?.name }}</td>
-                <td>{{ file.downloadCount }}</td>
-                <td>{{ file.size }} </td>
-                <td>{{ file.downloadedBy?.name }}</td>
+
+                    <button pButton type="button" icon="pi pi-pencil" class="p-button-text"
+                        (click)="editDocument(doc)">Edit</button>
+                    <button pButton type="button" icon="pi pi-trash" class="p-button-text p-button-danger"
+                        (click)="deleteDocument(doc.id)">delete</button>
+                    <button pButton type="button" icon="pi pi-eye" class="p-button-text"
+                        (click)="decryptAndPreviewFile(doc.fileName)">view</button>
+
+                </td>
             </tr>
         </ng-template>
     </p-table>
-</p-dialog>
+   
 
+     <!-- <p-dialog [(visible)]="displayImageDialog" modal="true" header="Image Preview" [style]="{width: '50vw'}">
+        <div *ngIf="imageUrl">
+            <img [src]="imageUrl" alt="Preview" style="max-width: 100%; max-height: 500px; display: block; margin: auto;" />
+        </div>
+    </p-dialog> -->
 
-    <button pButton type="button" icon="pi pi-pencil" class="p-button-text" (click)="editDocument(doc)">Edit</button>
-    <button pButton type="button" icon="pi pi-trash" class="p-button-text p-button-danger"(click)="deleteDocument(doc.id)">delete</button>
-    <button pButton type="button" icon="pi pi-eye" class="p-button-text" (click)="viewAllFiles()">view</button>
-
-    </td>
-    </tr>
-    </ng-template>
-    </p-table>
+    <p-dialog [(visible)]="displayImageDialog" modal="true" header="Image Preview" [style]="{width: '50vw'}">
+        <div class="image-container" *ngIf="imageUrl">
+            <img 
+                [src]="imageUrl" 
+                alt="Preview" 
+                [ngStyle]="{'transform': 'scale(' + zoomLevel + ') rotate(' + rotationAngle + 'deg)'}"
+                class="preview-image"
+            />
+        </div>
+    
+        <!-- Controls -->
+        <div class="image-controls">
+            <button class="zoom-in-btn" (click)="zoomIn()"><i class="fas fa-search-plus"></i></button>
+            <button class="zoom-out-btn" (click)="zoomOut()"><i class="fas fa-search-minus"></i></button>
+            <button class="rotate-left-btn" (click)="rotateLeft()"><i class="fas fa-undo"></i></button>
+            <button class="rotate-right-btn" (click)="rotateRight()"><i class="fas fa-redo"></i></button>
+      
+          </div>
+    </p-dialog>
+    
+    
 </div>
+
+
+

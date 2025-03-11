@@ -1,11 +1,12 @@
 
 .dashboard-container {
     padding: 20px;
+    height: 100vh; 
     max-width: 1300px;
     margin: auto;
     background: #ffffff;
     border-radius: 10px;
-    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+  
 }
 
 .top-buttons {
@@ -180,5 +181,64 @@
         gap: 10px;
     }
 }
+
+.image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.preview-image {
+    max-width: 100%;
+    max-height: 500px;
+    transition: transform 0.3s ease-in-out;
+}
+
+/* Buttons Styling */
+.image-controls {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.zoom-in-btn {
+    background-color: #84797a;
+    color: black;
+    padding: 8px 12px;
+    border: none;
+    cursor: pointer;
+}
+
+.zoom-out-btn {
+    background-color: #84797a;
+    color: black;
+    padding: 8px 12px;
+    border: none;
+    cursor: pointer;
+}
+
+.rotate-right-btn {
+    background-color: #84797a;
+    color: black;
+    padding: 8px 12px;
+    border: none;
+    cursor: pointer;
+}
+
+.rotate-left-btn {
+    background-color: #84797a;
+    color: black;
+    padding: 8px 12px;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    opacity: 0.8;
+}
+
+
 
 
